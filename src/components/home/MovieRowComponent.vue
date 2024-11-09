@@ -1,166 +1,265 @@
 <template>
   <div class="movie-row">
     <h2>{{ title }}</h2>
-    <div class="slider-container"
-         @wheel="handleWheel"
-         @touchstart="handleTouchStart"
-         @touchmove="handleTouchMove"
-         @touchend="handleTouchEnd"
-         @mousemove="handleMouseMove"
-         @mouseleave="handleMouseLeave">
-      <button class="slider-button left"
-              @click="slide('left')"
-              :style="{ opacity: showButtons && !atLeftEdge ? 1 : 0 }"
-              :disabled="atLeftEdge">&lt;</button>
+    <div
+        class="slider-container"
+        @wheel.prevent="handleWheel"
+        @touchstart="handleTouchStart"
+        @touchmove="handleTouchMove"
+        @touchend="handleTouchEnd"
+        @mousemove="showButtons = true"
+        @mouseleave="showButtons = false"
+    >
+      <button
+          class="slider-button left"
+          @click="slide('left')"
+          :style="{ opacity: showButtons && !atLeftEdge ? 1 : 0 }"
+          :disabled="atLeftEdge"
+      >
+        &lt;
+      </button>
       <div class="slider-window" ref="sliderWindow">
-        <div class="movie-slider" ref="slider" :style="{ transform: 'translateX(' + (-scrollAmount) + 'px)' }">
+        <div class="movie-slider" ref="slider" :style="{ transform: `translateX(${-scrollAmount}px)` }">
           <div v-for="movie in movies" :key="movie.id" class="movie-card" @click="toggleWishlist(movie)">
             <img :src="getImageUrl(movie.poster_path)" :alt="movie.title">
             <div v-if="isInWishlist(movie.id)" class="wishlist-indicator">👍</div>
           </div>
         </div>
       </div>
-      <button class="slider-button right"
-              @click="slide('right')"
-              :style="{ opacity: showButtons && !atRightEdge ? 1 : 0 }"
-              :disabled="atRightEdge">&gt;</button>
+      <button
+          class="slider-button right"
+          @click="slide('right')"
+          :style="{ opacity: showButtons && !atRightEdge ? 1 : 0 }"
+          :disabled="atRightEdge"
+      >
+        &gt;
+      </button>
     </div>
   </div>
 </template>
 
 <script>
+import axios from 'axios';
+import { ref, onMounted, onUnmounted, reactive, computed } from 'vue';
+
 export default {
+  name: 'MovieRowComponent',
   props: {
-    title: String,
-    fetchUrl: String
+    title: {
+      type: String,
+      required: true
+    },
+    fetchUrl: {
+      type: String,
+      required: true
+    }
   },
-  data() {
-    return {
-      movies: [],
-      scrollAmount: 0,
-      showButtons: false,
-      isScrolling: false,
-      touchStartX: 0,
-      touchEndX: 0,
-      maxScroll: 0
-    };
-  },
-  async created() {
-    await this.fetchMovies();
-    window.addEventListener('resize', this.handleResize);
-  },
-  unmounted() {
-    window.removeEventListener('resize', this.handleResize);
-  },
-  methods: {
-    async fetchMovies() {
+  setup(props) {
+    const movies = ref([]);
+    const slider = ref(null);
+    const sliderWindow = ref(null);
+    const scrollAmount = ref(0);
+    const showButtons = ref(false);
+    const touchStartX = ref(0);
+    const touchEndX = ref(0);
+    const maxScroll = ref(0);
+
+    const atLeftEdge = computed(() => scrollAmount.value <= 0);
+    const atRightEdge = computed(() => scrollAmount.value >= maxScroll.value);
+
+    const fetchMovies = async () => {
       try {
-        const response = await fetch(this.fetchUrl);
-        const data = await response.json();
-        this.movies = data.results;
+        const response = await axios.get(props.fetchUrl);
+        movies.value = response.data.results;
+        setTimeout(calculateMaxScroll, 0);
       } catch (error) {
         console.error('Error fetching movies:', error);
       }
-    },
-    getImageUrl(path) {
-      return `https://image.tmdb.org/t/p/w300${path}`;
-    },
-    slide(direction) {
-      const slideAmount = this.$refs.sliderWindow.clientWidth * 0.8;
+    };
+
+    const getImageUrl = (path) => `https://image.tmdb.org/t/p/w300${path}`;
+
+    const slide = (direction) => {
+      const slideAmount = sliderWindow.value.clientWidth * 0.8;
       if (direction === 'left') {
-        this.scrollAmount = Math.max(0, this.scrollAmount - slideAmount);
+        scrollAmount.value = Math.max(0, scrollAmount.value - slideAmount);
       } else {
-        this.scrollAmount = Math.min(this.maxScroll, this.scrollAmount + slideAmount);
+        scrollAmount.value = Math.min(maxScroll.value, scrollAmount.value + slideAmount);
       }
-    },
-    handleMouseMove() {
-      this.showButtons = true;
-    },
-    handleMouseLeave() {
-      this.showButtons = false;
-    },
-    handleWheel(event) {
-      event.preventDefault();
-      if (this.isScrolling) return;
-      this.isScrolling = true;
-      const direction = event.deltaY > 0 ? 'right' : 'left';
-      this.slide(direction);
-      setTimeout(() => (this.isScrolling = false), 500);
-    },
-    handleTouchStart(event) {
-      this.touchStartX = event.touches[0].clientX;
-    },
-    handleTouchMove(event) {
-      this.touchEndX = event.touches[0].clientX;
-    },
-    handleTouchEnd() {
-      const touchDiff = this.touchStartX - this.touchEndX;
-      const minSwipeDistance = 50;
-      if (Math.abs(touchDiff) > minSwipeDistance) {
+      console.log('Slide amount:', slideAmount); // slideAmount 값을 콘솔에 출력
+    };
+
+    const handleWheel = (event) => {
+      if (scrollAmount.value !== 0) {
+        const direction = event.deltaY > 0 ? 'right' : 'left';
+        slide(direction);
+      }
+    };
+
+    const handleTouchStart = (event) => {
+      touchStartX.value = event.touches[0].clientX;
+    };
+
+    const handleTouchMove = (event) => {
+      touchEndX.value = event.touches[0].clientX;
+    };
+
+    const handleTouchEnd = () => {
+      const touchDiff = touchStartX.value - touchEndX.value;
+      if (Math.abs(touchDiff) > 50) {
         const direction = touchDiff > 0 ? 'right' : 'left';
-        this.slide(direction, Math.abs(touchDiff));
+        slide(direction);
       }
-    },
-    handleResize() {
-      this.calculateMaxScroll();
-      this.scrollAmount = Math.min(this.scrollAmount, this.maxScroll);
-    },
-    toggleWishlist(movie) {
-      // Wishlist toggle logic
-    },
-    isInWishlist(movieId) {
-      // Check if movie is in wishlist
-      return false; // Placeholder
-    },
-    calculateMaxScroll() {
-      if (this.$refs.slider && this.$refs.sliderWindow) {
-        this.maxScroll = Math.max(0, this.$refs.slider.scrollWidth - this.$refs.sliderWindow.clientWidth);
+    };
+
+    const calculateMaxScroll = () => {
+      if (slider.value && sliderWindow.value) {
+        maxScroll.value = Math.max(0, slider.value.scrollWidth - sliderWindow.value.clientWidth);
       }
-    }
+    };
+
+    onMounted(() => {
+      fetchMovies();
+      window.addEventListener('resize', calculateMaxScroll);
+    });
+
+    onUnmounted(() => {
+      window.removeEventListener('resize', calculateMaxScroll);
+    });
+
+    return {
+      movies,
+      slider,
+      sliderWindow,
+      scrollAmount,
+      showButtons,
+      atLeftEdge,
+      atRightEdge,
+      slide,
+      handleWheel,
+      handleTouchStart,
+      handleTouchMove,
+      handleTouchEnd,
+      getImageUrl,
+      toggleWishlist(movie) {
+        // Wishlist toggle logic here
+      },
+      isInWishlist(movieId) {
+        // Wishlist check logic here
+        return false;
+      }
+    };
   }
 };
 </script>
 
 <style scoped>
-/* Movie row CSS from movie-row.component.css */
+.wishlist-indicator {
+  position: absolute;
+  top: 5px;
+  right: 5px;
+  background-color: rgba(0, 0, 0, 0.7);
+  color: white;
+  padding: 5px;
+  border-radius: 50%;
+  font-size: 12px;
+}
+
 .movie-row {
-  margin: 20px 0;
+  margin-top: 20px;
+  margin-bottom: 20px;
+  position: relative;
+  width: 100%;
+  overflow: hidden;
+}
+
+.movie-row h2 {
+  text-align: left;
+  margin-left: 30px;
 }
 
 .slider-container {
-  display: flex;
-  align-items: center;
   position: relative;
+  touch-action: pan-y;
 }
 
 .slider-window {
   overflow: hidden;
-  width: 100%;
+  margin: 0 40px;
 }
 
 .movie-slider {
   display: flex;
-  transition: transform 0.5s ease;
+  transition: transform 0.3s ease;
+  padding: 20px 0;
+  max-width: 94vw;
 }
 
 .movie-card {
-  margin: 0 10px;
+  flex: 0 0 auto;
+  width: 200px;
+  margin-right: 10px;
+  transition: transform 0.3s;
+  position: relative;
   cursor: pointer;
-  width: 150px;
-  border-radius: 10px;
+}
+
+.movie-card:hover {
+  transform: scale(1.05);
 }
 
 .movie-card img {
   width: 100%;
-  border-radius: 10px;
+  height: auto;
+  border-radius: 4px;
 }
 
-.wishlist-indicator {
+.slider-button {
   position: absolute;
-  top: 5px;
-  left: 5px;
-  background-color: rgba(255, 255, 255, 0.8);
-  border-radius: 50%;
-  padding: 5px;
+  top: 50%;
+  transform: translateY(-50%);
+  background-color: rgba(0, 0, 0, 0.5);
+  color: white;
+  border: none;
+  padding: 20px 10px;
+  cursor: pointer;
+  z-index: 10;
+  transition: opacity 0.3s, background-color 0.3s;
+}
+
+.slider-button:hover {
+  background-color: rgba(0, 0, 0, 0.8);
+}
+
+.slider-button.left {
+  left: 0;
+}
+
+.slider-button.right {
+  right: 0;
+}
+
+.slider-button:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .movie-row {
+    margin-bottom: 20px;
+  }
+
+  .movie-card {
+    width: 120px;
+    margin-right: 5px;
+  }
+
+  .movie-slider {
+    padding: 0;
+  }
+
+  .slider-window {
+    margin: 0 10px;
+  }
 }
 </style>
