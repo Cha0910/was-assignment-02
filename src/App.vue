@@ -1,11 +1,13 @@
 <script setup>
 import HelloWorld from './components/HelloWorld.vue'
 import TheWelcome from './components/TheWelcome.vue'
+import HeaderComponent from './components/header/HeaderComponent.vue';   // 헤더 컴포넌트
 </script>
 
 <template>
   <div id="app">
-    <router-view />  <!-- 라우터 뷰 컴포넌트 추가 -->
+    <HeaderComponent /> <!-- 헤더 컴포넌트-->
+    <router-view />  <!-- 라우터 뷰 컴포넌트 -->
   </div>
 </template>
 
