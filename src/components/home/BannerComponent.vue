@@ -25,7 +25,7 @@ export default {
 <style scoped>
 .banner {
   height: 60vh;
-  max-width: 95vw;
+  max-width: 97.5vw;
   background-size: cover;
   background-position: center;
   color: white;
