@@ -11,7 +11,7 @@
 <script>
 import BannerComponent from '../../components/home/BannerComponent.vue';
 import MovieRowComponent from '../../components/home/MovieRowComponent.vue';
-import { fetchFeaturedMovie, getURL4PopularMovies, getURL4ReleaseMovies, getURL4GenreMovies } from '../../utils/URL.js';
+import { fetchFeaturedMovie, getURL4PopularMovies, getURL4ReleaseMovies, getURL4GenreMovies } from '@/utils/URL.js';
 
 export default {
   components: {
@@ -20,7 +20,7 @@ export default {
   },
   data() {
     return {
-      apiKey: localStorage.getItem('TMDb-Key') || '',
+      apiKey: localStorage.getItem('TMDb-Key') || 'd7922a82505b68b762bdcd8c672b6f8e',
       featuredMovie: null,
       popularMoviesUrl: '',
       newReleasesUrl: '',
