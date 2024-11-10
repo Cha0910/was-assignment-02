@@ -1,6 +1,6 @@
 <template>
   <div class="card" id="register">
-    <form @submit.prevent="$emit('register')">
+    <form @submit.prevent="handleRegister">
       <h1>Sign up</h1>
       <div class="input" :class="{'active': isRegisterEmailFocused || registerEmail}">
         <input
@@ -46,16 +46,14 @@
 </template>
 
 <script>
+import { tryRegister } from '@/utils/Authentication.js';
+
 export default {
   data() {
     return {
       registerEmail: '',
       registerPassword: '',
       confirmPassword: '',
-      acceptTerms: false,
-      isRegisterEmailFocused: false,
-      isRegisterPasswordFocused: false,
-      isConfirmPasswordFocused: false,
     };
   },
   computed: {
@@ -64,13 +62,33 @@ export default {
           this.registerEmail &&
           this.registerPassword &&
           this.confirmPassword &&
-          this.registerPassword === this.confirmPassword &&
-          this.acceptTerms
+          this.registerPassword === this.confirmPassword
+      );
+    },
+  },
+  methods: {
+    handleRegister() {
+      if (this.registerPassword !== this.confirmPassword) {
+        alert('비밀번호가 일치하지 않습니다.');
+        return;
+      }
+
+      tryRegister(
+          this.registerEmail,
+          this.registerPassword,
+          () => {
+            alert('회원가입 성공');
+            this.$router.push('/signin'); // 회원가입 후 로그인 페이지로 이동
+          },
+          (err) => {
+            alert(err.message || '회원가입 실패');
+          }
       );
     },
   },
 };
 </script>
+
 
 <style scoped>
 .card {

@@ -1,6 +1,6 @@
 <template>
   <div class="card" id="login">
-    <form @submit.prevent="$emit('login')">
+    <form @submit.prevent="handleLogin">
       <h1>Sign in</h1>
       <div class="input" :class="{'active': isEmailFocused || email}">
         <input
@@ -38,14 +38,13 @@
 </template>
 
 <script>
+import { tryLogin } from '@/utils/Authentication.js';
+
 export default {
   data() {
     return {
       email: '',
       password: '',
-      rememberMe: false,
-      isEmailFocused: false,
-      isPasswordFocused: false,
     };
   },
   computed: {
@@ -53,8 +52,24 @@ export default {
       return this.email && this.password;
     },
   },
+  methods: {
+    handleLogin() {
+      tryLogin(
+          this.email,
+          this.password,
+          () => {
+            alert('로그인 성공');
+            this.$router.push('/'); // 로그인 성공 시 홈 페이지로 이동
+          },
+          () => {
+            alert('로그인 실패. 이메일이나 비밀번호를 확인하세요.');
+          }
+      );
+    },
+  },
 };
 </script>
+
 
 <style scoped>
 .card {

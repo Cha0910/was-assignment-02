@@ -29,13 +29,7 @@ export default {
   methods: {
     toggleCard() {
       this.isLoginVisible = !this.isLoginVisible;
-    },
-    handleLogin() {
-      alert('Login logic handled');
-    },
-    handleRegister() {
-      alert('Register logic handled');
-    },
+    }
   },
 };
 </script>
