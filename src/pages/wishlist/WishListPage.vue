@@ -1,17 +1,16 @@
 <template>
   <div class="movie-grid">
-    <h1>My Wishlist</h1>
-    <div v-if="wishlistMovies.length === 0" class="empty-wishlist">
-      위시리스트가 비어 있습니다.
-    </div>
-    <div v-else class="grid-container">
-      <div v-for="(movieGroup, index) in visibleWishlistMovies" :key="index" class="movie-row">
+    <div :class="['grid-container', currentView]">
+      <div v-for="(movieGroup, index) in visibleWishlistMovies" :key="index" :class="['movie-row', { 'full': movieGroup.length === rowSize }]">
         <div v-for="movie in movieGroup" :key="movie.id" class="movie-card" @click="toggleWishlist(movie)">
           <img :src="getImageUrl(movie.poster_path)" :alt="movie.title" />
           <div class="movie-title">{{ movie.title }}</div>
-          <div class="wishlist-indicator">👍</div>
+          <div class="wishlist-indicator">⭐</div>
         </div>
       </div>
+    </div>
+    <div v-if="wishlistMovies.length === 0" class="empty-wishlist">
+      위시리스트가 비어 있습니다.
     </div>
     <div class="pagination" v-if="totalPages > 1">
       <button @click="prevPage" :disabled="currentPage === 1">&lt; 이전</button>
@@ -25,50 +24,47 @@
 import WishlistManager from '@/utils/useWishlist.js';
 
 export default {
+  name: 'WishlistPage',
   data() {
     return {
+      wishlistManager: new WishlistManager(),
       wishlistMovies: [],
       visibleWishlistMovies: [],
-      rowSize: 4,
-      moviesPerPage: 20,
       currentPage: 1,
+      moviesPerPage: 20,
+      rowSize: 4,
+      currentView: 'grid',
       isMobile: window.innerWidth <= 768
     };
   },
-  created() {
-    window.addEventListener('resize', this.handleResize);
-    this.loadWishlist();
-    this.calculateLayout();
+  computed: {
+    totalPages() {
+      return Math.ceil(this.wishlistMovies.length / this.moviesPerPage);
+    }
   },
-  destroyed() {
+  created() {
+    this.loadWishlist();
+    window.addEventListener('resize', this.handleResize);
+    this.handleResize();
+  },
+  beforeUnmount() {
     window.removeEventListener('resize', this.handleResize);
   },
   methods: {
     loadWishlist() {
-      const wishlistManager = new WishlistManager();
-      this.wishlistMovies = wishlistManager.getWishlist();
+      this.wishlistMovies = this.wishlistManager.getWishlist();
       this.updateVisibleMovies();
     },
     getImageUrl(path) {
       return path ? `https://image.tmdb.org/t/p/w300${path}` : '/placeholder-image.jpg';
     },
-    toggleWishlist(movie) {
-      const wishlistManager = new WishlistManager();
-      wishlistManager.toggleWishlist(movie);
-      this.loadWishlist();
-    },
-    calculateLayout() {
-      this.isMobile = window.innerWidth <= 768;
-      const containerWidth = window.innerWidth;
-      const movieCardWidth = this.isMobile ? 90 : 220;
-      this.rowSize = Math.floor(containerWidth / (movieCardWidth + 15));
-      this.moviesPerPage = this.rowSize * 3; // 최대 표시 행 수
-      this.updateVisibleMovies();
-    },
     updateVisibleMovies() {
+      const maxRows = 2; // 최대 줄 수
+      this.moviesPerPage = this.rowSize * maxRows; // rowSize에 맞춰 2줄의 아이템 수로 제한
       const startIndex = (this.currentPage - 1) * this.moviesPerPage;
       const endIndex = startIndex + this.moviesPerPage;
       const paginatedMovies = this.wishlistMovies.slice(startIndex, endIndex);
+
       this.visibleWishlistMovies = paginatedMovies.reduce((resultArray, item, index) => {
         const groupIndex = Math.floor(index / this.rowSize);
         if (!resultArray[groupIndex]) {
@@ -89,23 +85,47 @@ export default {
         this.currentPage--;
         this.updateVisibleMovies();
       }
-    }
-  },
-  computed: {
-    totalPages() {
-      return Math.ceil(this.wishlistMovies.length / this.moviesPerPage);
+    },
+    handleResize() {
+      this.isMobile = window.innerWidth <= 768;
+      this.calculateLayout();
+    },
+    calculateLayout() {
+      const containerWidth = window.innerWidth;
+      const movieCardWidth = this.isMobile ? 90 : 220;
+      const horizontalGap = this.isMobile ? 10 : 15;
+
+      this.rowSize = Math.floor(containerWidth / (movieCardWidth + horizontalGap));
+      this.moviesPerPage = this.rowSize * 3; // Assume 3 rows visible at once
+      this.updateVisibleMovies();
+    },
+    toggleWishlist(movie) {
+      this.wishlistManager.toggleWishlist(movie);
+      this.loadWishlist();
     }
   }
 };
 </script>
 
 <style scoped>
+.wishlist-indicator {
+  position: absolute;
+  top: 0;
+  right: 10px;
+  font-size: 20px;
+  color: gold; /* 별의 색상 */
+  background-color: transparent; /* 배경을 투명하게 설정 */
+  box-shadow: none; /* 그림자 제거 */
+}
+
 .movie-grid {
-  width: 100%;
-  margin-bottom: 40px;
-  margin-top: 30px;
+  width: 100vw;
+  height: calc(100vh - 200px);
+  margin: 100px 0;
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
+  background-color: #141414;
 }
 
 .grid-container {
@@ -118,11 +138,12 @@ export default {
   display: flex;
   justify-content: center;
   margin-bottom: 20px;
+  width: 100%;
 }
 
 .movie-card {
-  width: 160px;
-  margin: 0 10px;
+  width: 200px;
+  margin: 10px 20px;
   transition: transform 0.3s;
   position: relative;
 }
@@ -134,6 +155,7 @@ export default {
 .movie-card img {
   width: 100%;
   border-radius: 4px;
+  object-fit: cover;
 }
 
 .movie-title {
@@ -148,13 +170,13 @@ export default {
 .empty-wishlist {
   text-align: center;
   font-size: 18px;
+  margin-top: 20px;
   color: #666;
 }
 
 .pagination {
   display: flex;
   justify-content: center;
-  align-items: center;
   margin-top: 20px;
 }
 
@@ -171,5 +193,21 @@ export default {
 .pagination button:disabled {
   opacity: 0.5;
   cursor: not-allowed;
+}
+
+@media (max-width: 768px) {
+  .movie-card {
+    width: 90px;
+    margin: 0 5px;
+  }
+
+  .movie-title {
+    font-size: 12px;
+  }
+
+  .pagination button {
+    padding: 8px 12px;
+    font-size: 14px;
+  }
 }
 </style>

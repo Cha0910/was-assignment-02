@@ -12,7 +12,7 @@ class WishlistManager {
     }
 
     saveWishlist() {
-        localStorgage.setItem('movieWishlist', JSON.stringify(this.wishlist));
+        localStorage.setItem('movieWishlist', JSON.stringify(this.wishlist));
     }
 
     toggleWishlist(movie) {

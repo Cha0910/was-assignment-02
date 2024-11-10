@@ -22,7 +22,7 @@
         <div class="movie-slider" ref="slider" :style="{ transform: `translateX(${-scrollAmount}px)` }">
           <div v-for="movie in movies" :key="movie.id" class="movie-card" @click="toggleWishlist(movie)">
             <img :src="getImageUrl(movie.poster_path)" :alt="movie.title">
-            <div v-if="isInWishlist(movie.id)" class="wishlist-indicator">👍</div>
+            <div v-if="isInWishlist(movie.id)" class="wishlist-indicator">⭐</div>
           </div>
         </div>
       </div>
@@ -158,13 +158,12 @@ export default {
 <style scoped>
 .wishlist-indicator {
   position: absolute;
-  top: 5px;
-  right: 5px;
-  background-color: rgba(0, 0, 0, 0.7);
-  color: white;
-  padding: 5px;
-  border-radius: 50%;
-  font-size: 12px;
+  top: 0;
+  right: 10px;
+  font-size: 20px;
+  color: gold; /* 별의 색상 */
+  background-color: transparent; /* 배경을 투명하게 설정 */
+  box-shadow: none; /* 그림자 제거 */
 }
 
 .movie-row {
