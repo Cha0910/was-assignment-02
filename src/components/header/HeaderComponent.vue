@@ -16,7 +16,7 @@
       </nav>
     </div>
     <div class="header-right">
-      <button class="icon-button" @click="removeKey">
+      <button class="icon-button" @click="confirmLogout">
         <i class="fas fa-user"></i>
       </button>
       <button class="icon-button mobile-menu-button" @click="toggleMobileMenu">
@@ -58,6 +58,14 @@ export default {
   methods: {
     handleScroll() {
       this.isScrolled = window.scrollY > 50;
+    },
+    confirmLogout() {
+      if(localStorage.getItem('TMDb-Key') !== null){
+        const userConfirmed = confirm('로그아웃 하시겠습니까?');
+        if (userConfirmed) {
+          this.removeKey();
+        }
+      }
     },
     removeKey() {
       localStorage.removeItem('TMDb-Key');
