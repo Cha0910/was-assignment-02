@@ -41,6 +41,7 @@
 <script>
 import axios from 'axios';
 import { ref, onMounted, onUnmounted, reactive, computed } from 'vue';
+import WishlistManager from '@/utils/useWishlist.js';
 
 export default {
   name: 'MovieRowComponent',
@@ -66,6 +67,8 @@ export default {
 
     const atLeftEdge = computed(() => scrollAmount.value <= 0);
     const atRightEdge = computed(() => scrollAmount.value >= maxScroll.value);
+
+    const wishlistManager = new WishlistManager();
 
     const fetchMovies = async () => {
       try {
@@ -142,11 +145,10 @@ export default {
       handleTouchEnd,
       getImageUrl,
       toggleWishlist(movie) {
-        // Wishlist toggle logic here
+        wishlistManager.toggleWishlist(movie);
       },
       isInWishlist(movieId) {
-        // Wishlist check logic here
-        return false;
+        return wishlistManager.isInWishlist(movieId);
       }
     };
   }
