@@ -1,43 +1,78 @@
 <template>
-  <div class="sign-in-page">
-    <transition name="fade-slide" mode="out-in">
-      <div v-if="isLoginVisible" key="login">
-        <SignIn @switch-to-signup="isLoginVisible = false" />
+  <div class="signin-page">
+    <div class="bg-image"></div>
+    <div class="container">
+      <div id="phone">
+        <div id="content-wrapper">
+          <signin v-if="isLoginVisible" @login="handleLogin" @toggle="toggleCard" />
+          <signup v-else @register="handleRegister" @toggle="toggleCard" />
+        </div>
       </div>
-      <div v-else key="signup">
-        <SignUp @switch-to-login="isLoginVisible = true" />
-      </div>
-    </transition>
+    </div>
   </div>
 </template>
 
 <script>
-import SignIn from './SignIn.vue';
-import SignUp from './SignUp.vue';
+import signin from '@/components/signin/signin.vue';
+import signup from '@/components/signin/signup.vue';
 
 export default {
   components: {
-    SignIn,
-    SignUp
+    signin,
+    signup,
   },
   data() {
     return {
-      isLoginVisible: true
+      isLoginVisible: true,
     };
-  }
+  },
+  methods: {
+    toggleCard() {
+      this.isLoginVisible = !this.isLoginVisible;
+    },
+    handleLogin() {
+      alert('Login logic handled');
+    },
+    handleRegister() {
+      alert('Register logic handled');
+    },
+  },
 };
 </script>
 
 <style scoped>
-.sign-in-page {
+.signin-page {
+  position: relative;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.bg-image {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #000;
+  z-index: -1;
+}
+
+.container {
+  height: 100vh;
+  width: 100vw;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
+}
+
+#phone {
+  width: 50vw;
   max-width: 400px;
-  margin: auto;
-}
-.fade-slide-enter-active, .fade-slide-leave-active {
-  transition: opacity 0.5s, transform 0.5s;
-}
-.fade-slide-enter, .fade-slide-leave-to {
-  opacity: 0;
-  transform: translateX(20px);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
 }
 </style>
