@@ -39,10 +39,8 @@ export default {
           this.email,
           this.password,
           () => {
+            localStorage.setItem('TMDb-Key', this.password); // 실제 로직에 따라 토큰 저장
             alert('Login successful');
-            if (this.rememberMe) {
-              localStorage.setItem('isLoggedIn', 'true');
-            }
             this.$router.push('/');
           },
           () => {
