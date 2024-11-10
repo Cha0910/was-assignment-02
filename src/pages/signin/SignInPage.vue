@@ -1,43 +1,37 @@
 <template>
-  <div class="sign-in-page">
-    <transition name="fade-slide" mode="out-in">
-      <div v-if="isLoginVisible" key="login">
-        <SignIn @switch-to-signup="isLoginVisible = false" />
+  <div>
+    <div class="bg-image"></div>
+    <div class="container">
+      <div id="phone">
+        <div id="content-wrapper">
+          <transition name="fade">
+            <signin v-if="isLoginVisible" @toggle="toggleCard" />
+            <signup v-else @toggle="toggleCard" />
+          </transition>
+        </div>
       </div>
-      <div v-else key="signup">
-        <SignUp @switch-to-login="isLoginVisible = true" />
-      </div>
-    </transition>
+    </div>
   </div>
 </template>
 
 <script>
-import SignIn from './SignIn.vue';
-import SignUp from './SignUp.vue';
+import signin from '@/components/signin/signin.vue';
+import signup from '@/components/signin/signup.vue';
 
 export default {
   components: {
-    SignIn,
-    SignUp
+    signin,
+    signup
   },
   data() {
     return {
       isLoginVisible: true
     };
+  },
+  methods: {
+    toggleCard() {
+      this.isLoginVisible = !this.isLoginVisible;
+    }
   }
 };
 </script>
-
-<style scoped>
-.sign-in-page {
-  max-width: 400px;
-  margin: auto;
-}
-.fade-slide-enter-active, .fade-slide-leave-active {
-  transition: opacity 0.5s, transform 0.5s;
-}
-.fade-slide-enter, .fade-slide-leave-to {
-  opacity: 0;
-  transform: translateX(20px);
-}
-</style>

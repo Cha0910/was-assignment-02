@@ -1,7 +1,6 @@
 <template>
   <div class="home">
     <BannerComponent :movie="featuredMovie" />
-
     <MovieRowComponent title="인기 영화" :fetchUrl="popularMoviesUrl" />
     <MovieRowComponent title="최신 영화" :fetchUrl="newReleasesUrl" />
     <MovieRowComponent title="액션 영화" :fetchUrl="actionMoviesUrl" />
