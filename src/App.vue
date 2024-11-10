@@ -14,6 +14,11 @@ import HeaderComponent from './components/header/HeaderComponent.vue';   // 헤�
 </template>
 
 <style scoped>
+#app {
+  background-color: #141414; /* 검은색 배경 */
+  min-height: 100vh; /* 전체 페이지 높이 설정 */
+}
+
 header {
   line-height: 1.5;
 }
