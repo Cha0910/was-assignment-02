@@ -19,7 +19,7 @@ export default {
   },
   data() {
     return {
-      apiKey: localStorage.getItem('TMDb-Key') || 'd7922a82505b68b762bdcd8c672b6f8e',
+      apiKey: localStorage.getItem('TMDb-Key') || '',
       featuredMovie: null,
       popularMoviesUrl: '',
       newReleasesUrl: '',
