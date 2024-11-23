@@ -13,7 +13,7 @@ const routes = [
         component: HomePage,
         meta: { requiresAuth: true } // 인증이 필요한 경로 설정
     },
-    { path: '/popular', component: PopularPage },
+    { path: '/views', component: PopularPage },
     //{ path: '/search', component: SearchPage },
     { path: '/wishlist', component: WishlistPage }
 ];

@@ -15,8 +15,8 @@
 </template>
 
 <script>
-import TableView from '../../components/popular/TableView.vue';
-import InfiniteScrollView from '../../components/popular/InfiniteScrollView.vue';
+import TableView from '@/components/views/TableView.vue';
+import InfiniteScrollView from '@/components/views/InfiniteScrollView.vue';
 import { getURL4PopularMovies } from '@/utils/URL.js';
 
 export default {

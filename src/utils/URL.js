@@ -1,7 +1,7 @@
 const baseUrl = 'https://api.themoviedb.org/3';
 
 /**
- * Fetches the featured movie (first movie from the popular movies list).
+ * Fetches the featured movie (first movie from the views movies list).
  * @param {string} apiKey - The API key for TMDB.
  * @returns {Promise<Object>} - A promise that resolves to the featured movie object.
  */
@@ -17,9 +17,9 @@ async function fetchFeaturedMovie(apiKey) {
 }
 
 /**
- * Generates the URL for fetching popular movies.
+ * Generates the URL for fetching views movies.
  * @param {string} apiKey - The API key for TMDB.
- * @returns {string} - The URL for fetching popular movies.
+ * @returns {string} - The URL for fetching views movies.
  */
 function getURL4PopularMovies(apiKey) {
     return `${baseUrl}/movie/popular?api_key=${apiKey}&language=ko-KR&page=1`;
