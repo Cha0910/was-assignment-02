@@ -2,7 +2,7 @@
   <div class="movie-grid" ref="gridContainer">
     <div :class="['grid-container', currentView]">
       <div v-for="(movieGroup, index) in visibleMovieGroups" :key="index" :class="['movie-row', { 'full': movieGroup.length === rowSize }]">
-        <div v-for="movie in movieGroup" :key="movie.id" class="movie-card" @mouseup="toggleWishlist(movie)">
+        <div v-for="movie in movieGroup" :key="movie.id" class="movie-card" @click="toggleWishlist(movie)">
           <img :src="getImageUrl(movie.poster_path)" :alt="movie.title" />
           <div class="movie-title">{{ movie.title }}</div>
           <div v-if="isInWishlist(movie.id)" class="wishlist-indicator">⭐</div>
@@ -102,11 +102,11 @@ export default {
 
     const toggleWishlist = (movie) => {
       wishlistManager.toggleWishlist(movie);
-      wishlistManager.loadWishlist();
+      movies.value = [...movies.value];
     };
 
-    const isInWishlist = (movieId) => {
-      return wishlistManager.isInWishlist(movieId);
+    const isInWishlist = (movie) => {
+      return wishlistManager.isInWishlist(movie);
     };
 
     const handleResize = () => {

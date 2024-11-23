@@ -146,6 +146,7 @@ export default {
       getImageUrl,
       toggleWishlist(movie) {
         wishlistManager.toggleWishlist(movie);
+        movies.value = [...movies.value];
       },
       isInWishlist(movieId) {
         return wishlistManager.isInWishlist(movieId);
