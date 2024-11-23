@@ -52,7 +52,9 @@ export default {
 .view-toggle {
   display: flex;
   justify-content: flex-end;
+  margin-top: 50px;
   margin-bottom: 20px;
+  margin-right: 50px;
 }
 
 .view-toggle button {

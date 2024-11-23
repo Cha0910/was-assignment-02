@@ -156,16 +156,17 @@ export default {
 }
 
 .movie-grid {
-  width: 100vw;
   height: calc(100vh - 200px);
   margin-bottom: 40px;
-  margin-top: 100px;
+  margin-top: 30px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;
 }
 
 .grid-container {
+  overflow: hidden;
+  width: 100vw;
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -204,6 +205,7 @@ export default {
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  color: white;
 }
 
 .pagination {
