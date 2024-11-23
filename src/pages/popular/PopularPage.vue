@@ -27,7 +27,8 @@ export default {
   data() {
     return {
       apiKey: localStorage.getItem('TMDb-Key') || '', // API 키 가져오기
-      popularMoviesUrl: ''
+      popularMoviesUrl: '',
+      currentView: 'table'
     };
   },
   created() {
