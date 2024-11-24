@@ -24,6 +24,15 @@
         <i class="fas fa-bars"></i>
       </button>
     </div>
+    <nav class="mobile-nav" :class="{ open: isMobileMenuOpen }">
+      <ul>
+        <li><router-link to="/" @click="toggleMobileMenu">홈</router-link></li>
+        <li><router-link to="/popular" @click="toggleMobileMenu">대세 콘텐츠</router-link></li>
+        <li><router-link to="/wishlist" @click="toggleMobileMenu">내가 찜한 리스트</router-link></li>
+        <li><router-link to="/search" @click="toggleMobileMenu">찾아보기</router-link></li>
+      </ul>
+      <button class="close-button" @click="toggleMobileMenu">×</button>
+    </nav>
   </header>
 </template>
 
@@ -73,7 +82,7 @@ export default {
   justify-content: space-between;
   align-items: center;
   padding: 20px 4%;
-  background-color: transparent;
+  background-color: #141414;
   position: fixed;
   top: 0;
   left: 0;

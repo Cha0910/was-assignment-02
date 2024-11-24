@@ -1,3 +1,12 @@
-module.exports = {
-    publicPath: '/was-assignment-02',
-};
+module.exports = defineConfig({
+    transpileDependencies: true,
+    configureWebpack: {
+        resolve: {
+            alias: {
+                '@': path.resolve(__dirname, 'src'),
+            },
+        },
+    },
+    publicPath: '/was-assignment-02/',
+    outputDir: 'dist',
+});
