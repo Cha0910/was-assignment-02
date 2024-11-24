@@ -63,6 +63,18 @@ export default {
   methods: {
     updateFilters(newFilters) {
       this.filters = newFilters;
+      this.saveSearchRecord(this.filters)
+    },
+    saveSearchRecord(filters) {
+      const userId = localStorage.getItem("User-Id");
+      const searchHistory = JSON.parse(localStorage.getItem(userId + "searchHistory")) || [];
+      searchHistory.push({
+        genre: filters.genre,
+        age: filters.age,
+        sorting: filters.sorting,
+        timestamp: new Date().toISOString(),
+      });
+      localStorage.setItem(userId + "searchHistory", JSON.stringify(searchHistory));
     },
   },
 };
