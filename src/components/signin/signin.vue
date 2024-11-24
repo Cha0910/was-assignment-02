@@ -73,13 +73,21 @@ export default {
 
 <style scoped>
 .card {
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  color: black;
   border-radius: 10px;
-  background-color: #fff;
-  padding: 27px 30px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
   max-width: 400px;
   margin: auto;
-  transition: all 0.3s ease;
+  padding: 27px 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  backface-visibility: hidden;
+  transition: transform 0.4s ease, height 0.4s ease;
 }
 
 .input {

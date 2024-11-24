@@ -92,13 +92,21 @@ export default {
 
 <style scoped>
 .card {
-  border-radius: 10px;
+  width: 100%;
+  height: 100%;
   background-color: #fff;
+  color: black;
   padding: 27px 30px;
-  box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
   max-width: 400px;
   margin: auto;
-  transition: all 0.3s ease;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  backface-visibility: hidden;
+  transition: transform 0.4s ease, height 0.4s ease;
 }
 
 .input {
