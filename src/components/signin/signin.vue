@@ -1,0 +1,136 @@
+<template>
+  <div class="card" id="login">
+    <form @submit.prevent="handleLogin">
+      <h1>Sign in</h1>
+      <div class="input" :class="{'active': isEmailFocused || email}">
+        <input
+            id="email"
+            type="email"
+            v-model="email"
+            @focus="isEmailFocused = true"
+            @blur="isEmailFocused = false"
+            required
+        />
+        <label for="email">Username or Email</label>
+      </div>
+      <div class="input" :class="{'active': isPasswordFocused || password}">
+        <input
+            id="password"
+            type="password"
+            v-model="password"
+            @focus="isPasswordFocused = true"
+            @blur="isPasswordFocused = false"
+            required
+        />
+        <label for="password">Password</label>
+      </div>
+      <span class="checkbox remember">
+        <input type="checkbox" id="remember" v-model="rememberMe" />
+        <label for="remember" class="read-text">Remember me</label>
+      </span>
+      <span class="checkbox forgot">
+        <a href="#">Forgot Password?</a>
+      </span>
+      <button :disabled="!isLoginFormValid">Login</button>
+    </form>
+    <a href="javascript:void(0)" class="account-check" @click="$emit('toggle')">Don't have an account? <b>Sign up</b></a>
+  </div>
+</template>
+
+<script>
+import { tryLogin } from '@/utils/Authentication.js';
+
+export default {
+  data() {
+    return {
+      email: '',
+      password: '',
+    };
+  },
+  computed: {
+    isLoginFormValid() {
+      return this.email && this.password;
+    },
+  },
+  methods: {
+    handleLogin() {
+      tryLogin(
+          this.email,
+          this.password,
+          () => {
+            alert('로그인 성공');
+            this.$router.push('/'); // 로그인 성공 시 홈 페이지로 이동
+          },
+          () => {
+            alert('로그인 실패. 이메일이나 비밀번호를 확인하세요.');
+          }
+      );
+    },
+  },
+};
+</script>
+
+
+<style scoped>
+.card {
+  width: 100%;
+  height: 100%;
+  background-color: white;
+  color: black;
+  border-radius: 10px;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+  max-width: 400px;
+  margin: auto;
+  padding: 27px 30px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  backface-visibility: hidden;
+  transition: transform 0.4s ease, height 0.4s ease;
+}
+
+.input {
+  position: relative;
+  margin-top: 1.5rem;
+}
+
+.input input {
+  background-color: transparent;
+  border: none;
+  border-bottom: 1px solid #9e9e9e;
+  outline: none;
+  width: 100%;
+  height: 2.5rem;
+  font-size: 1rem;
+}
+
+.input label {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  font-size: 1rem;
+  transform-origin: 0% 100%;
+  transform: translateY(12px);
+  transition: transform 0.2s ease-out, opacity 0.2s ease-out;
+}
+
+.input.active label {
+  transform: translateY(-14px) scale(0.8);
+}
+
+button {
+  width: 100%;
+  background-color: #2069ff;
+  color: #fff;
+  padding: 10px;
+  border-radius: 50px;
+  margin-top: 20px;
+  transition: all 0.3s ease;
+}
+
+button:hover {
+  box-shadow: 0px 5px 15px rgba(32, 105, 255, 0.5);
+}
+</style>

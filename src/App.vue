@@ -1,15 +1,24 @@
 <script setup>
 import HelloWorld from './components/HelloWorld.vue'
 import TheWelcome from './components/TheWelcome.vue'
+import '@fortawesome/fontawesome-free/css/all.css';
+import '@fortawesome/fontawesome-free/js/all.js';
+import HeaderComponent from './components/header/HeaderComponent.vue';   // 헤더 컴포넌트
 </script>
 
 <template>
   <div id="app">
-    <router-view />  <!-- 라우터 뷰 컴포넌트 추가 -->
+    <HeaderComponent /> <!-- 헤더 컴포넌트-->
+    <router-view />  <!-- 라우터 뷰 컴포넌트 -->
   </div>
 </template>
 
 <style scoped>
+#app {
+  background-color: #141414; /* 검은색 배경 */
+  min-height: 100vh; /* 전체 페이지 높이 설정 */
+}
+
 header {
   line-height: 1.5;
 }

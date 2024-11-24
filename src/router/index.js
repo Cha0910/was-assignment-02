@@ -1,21 +1,24 @@
 import { createRouter, createWebHistory } from 'vue-router';
 import SignInPage from '../pages/signin/SignInPage.vue';
-//import HomePage from '../pages/HomePage.vue';
-//import PopularPage from '../pages/PopularPage.vue';
-//import SearchPage from '../pages/SearchPage.vue';
-//import WishlistPage from '../pages/WishlistPage.vue';
+import HomePage from '../pages/home/HomePage.vue';
+import PopularPage from '../pages/popular/PopularPage.vue';
+import SearchPage from '../pages/search/SearchPage.vue';
+import WishlistPage from '../pages/wishlist/WishListPage.vue';
+import { authGuard } from '@/utils/authGuard';
 
 const routes = [
     { path: '/signin', component: SignInPage },
-    //{ path: '/', component: HomePage },
-    //{ path: '/popular', component: PopularPage },
-    //{ path: '/search', component: SearchPage },
-    //{ path: '/wishlist', component: WishlistPage }
+    { path: '/', component: HomePage, meta: { requiresAuth: true } },
+    { path: '/popular', component: PopularPage, meta: { requiresAuth: true }},
+    { path: '/search', component: SearchPage, meta: { requiresAuth: true } },
+    { path: '/wishlist', component: WishlistPage, meta: { requiresAuth: true } }
 ];
 
 const router = createRouter({
     history: createWebHistory(),
     routes
 });
+
+router.beforeEach(authGuard);
 
 export default router;
