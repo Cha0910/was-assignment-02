@@ -122,6 +122,7 @@ export default {
 
     const resetMovies = () => {
       movies.value = [];
+      currentPage.value = 1;
       hasMore.value = true;
       isLoading.value = false;
       fetchMovies();
