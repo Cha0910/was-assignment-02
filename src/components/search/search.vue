@@ -112,10 +112,12 @@ label {
 @media (max-width: 768px) {
   .search-filter {
     flex-wrap: wrap; /* 화면이 좁아질 경우 줄 바꿈 */
-    justify-content: flex-end; /* 모바일에서도 오른쪽 정렬 */
+    margin-right: 15px;
     gap: 10px;
   }
-
+  .filter-block {
+    width: 30%;
+  }
   .filter-select {
     width: 100%; /* 좁은 화면에서는 드롭다운이 화면에 맞게 늘어나도록 */
   }
