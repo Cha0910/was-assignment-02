@@ -6,6 +6,7 @@ const tryLogin = (email, password, success, fail, saveToken = true) => {
 
     if (user) {
         if (saveToken) {
+            localStorage.setItem('User-ID', user.id);
             localStorage.setItem('TMDb-Key', user.password);
         }
         success(user);

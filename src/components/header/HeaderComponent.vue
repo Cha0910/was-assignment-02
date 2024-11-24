@@ -16,27 +16,13 @@
       </nav>
     </div>
     <div class="header-right">
+      <span v-if="userName" class="user-name">{{ userName }}</span>
       <button class="icon-button" @click="confirmLogout">
         <i class="fas fa-user"></i>
       </button>
       <button class="icon-button mobile-menu-button" @click="toggleMobileMenu">
         <i class="fas fa-bars"></i>
       </button>
-    </div>
-
-    <!-- Mobile Navigation -->
-    <div class="mobile-nav" :class="{ 'open': isMobileMenuOpen }">
-      <button class="close-button" @click="toggleMobileMenu">
-        <i class="fas fa-times"></i>
-      </button>
-      <nav>
-        <ul>
-          <li><router-link to="/" @click.native="toggleMobileMenu">홈</router-link></li>
-          <li><router-link to="/popular" @click.native="toggleMobileMenu">대세 콘텐츠</router-link></li>
-          <li><router-link to="/wishlist" @click.native="toggleMobileMenu">내가 찜한 리스트</router-link></li>
-          <li><router-link to="/search" @click.native="toggleMobileMenu">찾아보기</router-link></li>
-        </ul>
-      </nav>
     </div>
   </header>
 </template>
@@ -46,35 +32,37 @@ export default {
   data() {
     return {
       isScrolled: false,
-      isMobileMenuOpen: false
+      isMobileMenuOpen: false,
+      userName: null,
     };
   },
   mounted() {
-    window.addEventListener('scroll', this.handleScroll);
+    this.userName = localStorage.getItem("User-ID") || null; // 로컬스토리지에서 유저 ID 가져오기
+    window.addEventListener("scroll", this.handleScroll);
   },
   beforeUnmount() {
-    window.removeEventListener('scroll', this.handleScroll);
+    window.removeEventListener("scroll", this.handleScroll);
   },
   methods: {
     handleScroll() {
       this.isScrolled = window.scrollY > 50;
     },
     confirmLogout() {
-      if(localStorage.getItem('TMDb-Key') !== null){
-        const userConfirmed = confirm('로그아웃 하시겠습니까?');
-        if (userConfirmed) {
-          this.removeKey();
-        }
+      const userConfirmed = confirm("로그아웃 하시겠습니까?");
+      if (userConfirmed) {
+        this.logout();
       }
     },
-    removeKey() {
-      localStorage.removeItem('TMDb-Key');
-      this.$router.push('/signin');
+    logout() {
+      localStorage.removeItem("User-ID");
+      localStorage.removeItem("TMDb-Key");
+      this.userName = null; // 헤더에서 이름 제거
+      this.$router.push("/signin");
     },
     toggleMobileMenu() {
       this.isMobileMenuOpen = !this.isMobileMenuOpen;
-    }
-  }
+    },
+  },
 };
 </script>
 
@@ -145,6 +133,13 @@ export default {
 
 .icon-button:hover {
   opacity: 0.5;
+}
+
+.user-name {
+  color: white;
+  margin-right: 10px;
+  font-size: 1rem;
+  font-weight: bold;
 }
 
 .mobile-menu-button {
