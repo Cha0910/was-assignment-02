@@ -29,7 +29,7 @@
 </template>
 
 <script>
-import { ref, computed, onMounted, onUnmounted } from "vue";
+import {ref, computed, onMounted, onUnmounted, watch} from "vue";
 import axios from "axios";
 import WishlistManager from "@/utils/useWishlist.js";
 
@@ -119,6 +119,22 @@ export default {
       const horizontalGap = isMobile.value ? 10 : 15;
       rowSize.value = Math.floor(containerWidth / (movieCardWidth + horizontalGap));
     };
+
+    const resetMovies = () => {
+      movies.value = [];
+      currentPage.value = 1;
+      hasMore.value = true;
+      isLoading.value = false;
+      fetchMovies();
+    };
+
+    watch(
+        () => props.fetchUrl,
+        () => {
+          resetMovies();
+        },
+        { deep: true }
+    );
 
     onMounted(() => {
       fetchMovies();
