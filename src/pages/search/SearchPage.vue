@@ -84,7 +84,7 @@ export default {
 .search-page {
   display: flex;
   flex-direction: column;
-  margin-top: 50px;
+  padding-top: 50px;
   gap: 20px;
 }
 </style>

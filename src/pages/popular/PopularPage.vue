@@ -47,6 +47,7 @@ export default {
 <style scoped>
 .popular-container {
   padding: 20px;
+  background-color: #141414;
 }
 
 .view-toggle {

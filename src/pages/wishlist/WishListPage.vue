@@ -121,7 +121,8 @@ export default {
 .movie-grid {
   width: 100vw;
   height: calc(100vh - 200px);
-  margin: 100px 0;
+  margin: 0px 0;
+  padding-top: 100px;
   display: flex;
   flex-direction: column;
   justify-content: space-between;

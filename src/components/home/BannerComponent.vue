@@ -46,6 +46,7 @@ export default {
 
 .banner h1 {
   font-size: 3rem;
+  padding-top: 00px;
   margin-bottom: 0.5rem;
 }
 
@@ -73,5 +74,11 @@ export default {
 .info-btn {
   background-color: rgba(109, 109, 110, 0.7);
   color: white;
+}
+
+@media (max-width: 768px) {
+  .banner p {
+    display: none;
+  }
 }
 </style>
