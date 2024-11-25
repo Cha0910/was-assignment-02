@@ -26,7 +26,16 @@ jobs:
           npm install
           npm run build
 
-      # 4. 빌드 결과물을 gh-pages 브랜치로 배포
+  deploy:
+    needs: build  # build가 완료된 후 실행
+    runs-on: ubuntu-latest
+
+    steps:
+      # 1. 저장소 체크아웃
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
+      # 2. 빌드 결과물을 gh-pages 브랜치로 배포
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v3
         with:
