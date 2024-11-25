@@ -3,7 +3,7 @@ name: Deploy to GitHub Pages
 on:
   push:
     branches:
-      - master  # marster 브랜치에 푸시될 때만 실행
+      - master  # master 브랜치에 푸시될 때만 실행
 
 jobs:
   build:
