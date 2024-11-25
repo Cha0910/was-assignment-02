@@ -46,11 +46,13 @@ export default {
     };
   },
   mounted() {
-    this.userName = localStorage.getItem("User-ID") || null; // 로컬스토리지에서 유저 ID 가져오기
+    this.updateUserName();
     window.addEventListener("scroll", this.handleScroll);
+    window.addEventListener('storage', this.updateUserName);
   },
   beforeUnmount() {
     window.removeEventListener("scroll", this.handleScroll);
+    window.removeEventListener("storage", this.updateUserName);
   },
   methods: {
     handleScroll() {
@@ -61,6 +63,9 @@ export default {
       if (userConfirmed) {
         this.logout();
       }
+    },
+    updateUserName() {
+      this.userName = localStorage.getItem("User-ID") || null; // User-ID 가져오기
     },
     logout() {
       localStorage.removeItem("User-ID");
