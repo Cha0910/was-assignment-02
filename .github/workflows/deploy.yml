@@ -26,6 +26,15 @@ jobs:
           npm install
           npm run build
 
+      - name: Debug workspace
+        run: |
+          pwd
+          ls -la
+
+      - name: Debug build directory
+        run: |
+          ls -la ./dist
+
   deploy:
     needs: build  # build가 완료된 후 실행
     runs-on: ubuntu-latest
