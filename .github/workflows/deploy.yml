@@ -50,3 +50,4 @@ jobs:
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           publish_dir: ./dist  # 빌드 결과물 디렉토리
+          allow_empty_commit: true
