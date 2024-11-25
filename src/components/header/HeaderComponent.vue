@@ -17,7 +17,7 @@
     </div>
     <div class="header-right">
       <span v-if="userName" class="user-name">{{ userName }}</span>
-      <button class="icon-button" @click="confirmLogout">
+      <button class="icon-button" @click="confirmLogout" :disabled="!userName">
         <i class="fas fa-user"></i>
       </button>
       <button class="icon-button mobile-menu-button" @click="toggleMobileMenu">
