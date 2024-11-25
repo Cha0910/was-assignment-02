@@ -10,7 +10,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. 저장소 체크아웃
+      # 1. 리포지토리 체크아웃
       - name: Checkout repository
         uses: actions/checkout@v3
 
@@ -18,22 +18,23 @@ jobs:
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
-          node-version: 20
+          node-version: '18'
 
-      # 3. 의존성 설치 및 빌드
-      - name: Install and Build
-        run: |
-          npm install
-          npm run build
+      # 3. 의존성 설치
+      - name: Install dependencies
+        run: npm ci
 
-      - name: Debug workspace
-        run: |
-          pwd
-          ls -la
+      # 4. 빌드 전 기존 dist 폴더 삭제
+      - name: Clean dist folder
+        run: rm -rf dist
 
-      - name: Debug build directory
-        run: |
-          ls -la ./dist
+      # 5. Vite 프로젝트 빌드
+      - name: Build Vite project
+        run: npm run build
+
+      # 6. dist/assets 확인
+      - name: Verify assets in dist folder
+        run: ls -l dist/assets
 
   deploy:
     needs: build  # build가 완료된 후 실행

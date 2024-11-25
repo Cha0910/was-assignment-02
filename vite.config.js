@@ -9,7 +9,7 @@ export default defineConfig({
     vue(),
   ],
 
-  base: '/was-assignment-02/',
+  base: './',
 
   resolve: {
     alias: {
