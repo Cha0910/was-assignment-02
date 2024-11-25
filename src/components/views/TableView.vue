@@ -228,4 +228,15 @@ export default {
   opacity: 0.5;
   cursor: not-allowed;
 }
+
+@media (max-width: 768px) {
+  .movie-card {
+    width: 100px;
+    margin: 0 5px;
+  }
+
+  .movie-title {
+    font-size: 12px;
+  }
+}
 </style>

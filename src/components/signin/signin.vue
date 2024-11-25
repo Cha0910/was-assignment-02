@@ -26,14 +26,16 @@
       </div>
       <span class="checkbox remember">
         <input type="checkbox" id="remember" v-model="rememberMe" />
-        <label for="remember" class="read-text">Remember me</label>
-      </span>
-      <span class="checkbox forgot">
-        <a href="#">Forgot Password?</a>
+        <label for="remember" class="read-text"> Remember me</label>
       </span>
       <button :disabled="!isLoginFormValid">Login</button>
     </form>
-    <a href="javascript:void(0)" class="account-check" @click="$emit('toggle')">Don't have an account? <b>Sign up</b></a>
+    <div class="link-container">
+      <a href="javascript:void(0)" class="account-check" @click="$emit('toggle')">Don't have an account? <b>Sign up</b></a>
+      <span class="checkbox forgot">
+          <a href="#">Forgot Password?</a>
+      </span>
+    </div>
   </div>
 </template>
 
@@ -59,6 +61,7 @@ export default {
           this.password,
           () => {
             alert('로그인 성공');
+            window.dispatchEvent(new Event('storage'));
             this.$router.push('/'); // 로그인 성공 시 홈 페이지로 이동
           },
           () => {
@@ -79,12 +82,13 @@ export default {
   color: black;
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-  max-width: 400px;
+  min-width: 350px;
+  max-width: 350px;
   margin: auto;
   padding: 27px 30px;
   display: flex;
   flex-direction: column;
-  align-items: center;
+  align-items: stretch;
   justify-content: center;
   backface-visibility: hidden;
   transition: transform 0.4s ease, height 0.4s ease;
@@ -132,5 +136,12 @@ button {
 
 button:hover {
   box-shadow: 0px 5px 15px rgba(32, 105, 255, 0.5);
+}
+
+.link-container {
+  display: flex;
+  flex-direction: column; /* 세로 정렬 */
+  align-items: center; /* 수평 가운데 정렬 */
+  justify-content: center; /* 수직 가운데 정렬 */
 }
 </style>
