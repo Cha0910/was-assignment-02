@@ -37,7 +37,7 @@
       </div>
       <span class="checkbox remember">
         <input type="checkbox" id="terms" v-model="acceptTerms" />
-        <label for="terms" class="read-text">I have read <b>Terms and Conditions</b></label>
+        <label for="terms" class="read-text"> I have read <b>Terms and Conditions</b></label>
       </span>
       <button :disabled="!isRegisterFormValid">Register</button>
     </form>
@@ -54,6 +54,7 @@ export default {
       registerEmail: '',
       registerPassword: '',
       confirmPassword: '',
+      acceptTerms: false,
     };
   },
   computed: {
@@ -62,7 +63,8 @@ export default {
           this.registerEmail &&
           this.registerPassword &&
           this.confirmPassword &&
-          this.registerPassword === this.confirmPassword
+          this.registerPassword === this.confirmPassword &&
+          this.acceptTerms
       );
     },
   },
@@ -99,7 +101,8 @@ export default {
   padding: 27px 30px;
   border-radius: 10px;
   box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
-  max-width: 400px;
+  min-width: 350px;
+  max-width: 350px;
   margin: auto;
   display: flex;
   flex-direction: column;
