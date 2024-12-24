@@ -1,9 +1,10 @@
 
-# WAS Assignment 02
+# WAS Assignment 02, 04
 
 ## 프로젝트 설명
 Vue.js를 사용하여 Single Page Application으로 제작된 Front-End Demo site입니다.
 
+04 카카오 로그인 기능을 추가하였습니다.
 ## 기술 스택
 - **프론트엔드**: Vue.js (^3.5.12), Vue Router (^4.4.5)
 - **스타일링**: FontAwesome Free (^6.6.0)
@@ -77,6 +78,7 @@ npm run build
  ┃ ┣ 📂utils                            # 기능 관련 JS
  ┃ ┃ ┣ 📜Authentication.js
  ┃ ┃ ┣ 📜authGuard.js
+ ┃ ┃ ┣ 📜kakao.js
  ┃ ┃ ┣ 📜URL.js
  ┃ ┃ ┗ 📜useWishlist.js
  ┃ ┣ 📜App.vue
