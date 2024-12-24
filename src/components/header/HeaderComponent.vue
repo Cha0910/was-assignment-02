@@ -67,8 +67,10 @@ export default {
       if(localStorage.getItem("kakao_token") !== null) {
         kakaoLogout(); // 카카오 로그아웃 처리
       }
-      localStorage.removeItem("User-ID");
-      localStorage.removeItem("TMDb-Key");
+      else{
+        localStorage.removeItem("User-ID");
+        localStorage.removeItem("TMDb-Key");
+      }
       this.userName = null; // 헤더에서 이름 제거
       this.$router.push("/signin");
     },
