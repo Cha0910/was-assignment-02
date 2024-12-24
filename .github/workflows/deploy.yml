@@ -24,19 +24,22 @@ jobs:
       - name: Install dependencies
         run: npm ci
 
-      # 4. 빌드 전 기존 dist 폴더 삭제
+      # 4. .env 파일 생성 및 Vite 환경 변수 설정
+      - name: Set environment variables
+        run: |
+          echo "VITE_KAKAO_API_KEY=${{ secrets.KAKAO_API_KEY }}" >> .env
+          echo "VITE_TMDB_API_KEY=${{ secrets.TMDB_API_KEY }}" >> .env
+          echo "VITE_IP_ADDRESS=${{ secrets.IP_ADDRESS }}" >> .env  # GitHub Secrets에서 VITE_IP_ADDRESS를 .env 파일에 추가
+
+      # 5. 빌드 전 기존 dist 폴더 삭제
       - name: Clean dist folder
         run: rm -rf dist
 
-      # 5. Vite 프로젝트 빌드
+      # 6. Vite 프로젝트 빌드
       - name: Build Vite project
-        env:
-          VITE_KAKAO_API_KEY: ${{ secrets.KAKAO_API_KEY }}  # GitHub Secrets에서 환경 변수 사용
-          VITE_TMDB_API_KEY: ${{ secrets.TMDB_API_KEY }}
-          VITE_IP_ADDRESS: ${{ secrets.IP_ADDRESS }}
         run: npm run build
 
-      # 6. dist/assets 확인
+      # 7. dist/assets 확인
       - name: Verify assets in dist folder
         run: ls -l dist/assets
 
