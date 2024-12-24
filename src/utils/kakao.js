@@ -1,7 +1,7 @@
 // kakao.js
 const KAKAO_API_KEY = import.meta.env.VITE_KAKAO_API_KEY;
 const REDIRECT_URI = process.env.NODE_ENV === 'production'
-    ? 'https://cha0910.github.io/was-assignment-02/'  // GitHub Pages URL (배포 환경)
+    ? `https://${import.meta.env.VITE_IP_ADDRESS}`  // GitHub Pages URL (배포 환경)
     : `http://${import.meta.env.VITE_IP_ADDRESS}:${import.meta.env.VITE_PORT}/`;  // 로컬 개발 환경
 const TMDB_API_KEY = import.meta.env.VITE_TMDB_API_KEY;
 

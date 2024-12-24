@@ -33,6 +33,7 @@ jobs:
         env:
           VITE_KAKAO_API_KEY: ${{ secrets.KAKAO_API_KEY }}  # GitHub Secrets에서 환경 변수 사용
           VITE_TMDB_API_KEY: ${{ secrets.TMDB_API_KEY }}
+          VITE_IP_ADDRESS: ${{ secrets.IP_ADDRESS }}
         run: npm run build
 
       # 6. dist/assets 확인
