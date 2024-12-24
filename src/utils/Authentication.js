@@ -1,4 +1,6 @@
 // util.js
+const TMDB_API_KEY = import.meta.env.VITE_TMDB_API_KEY;
+
 const tryLogin = (email, password, success, fail, saveToken = true) => {
     const users = JSON.parse(localStorage.getItem('users')) || [];
 
@@ -7,7 +9,7 @@ const tryLogin = (email, password, success, fail, saveToken = true) => {
     if (user) {
         if (saveToken) {
             localStorage.setItem('User-ID', user.id);
-            localStorage.setItem('TMDb-Key', user.password);
+            localStorage.setItem('TMDb-Key', TMDB_API_KEY);
         }
         success(user);
     } else {

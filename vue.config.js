@@ -1,3 +1,6 @@
+
+const path = require('path');
+
 module.exports = defineConfig({
     transpileDependencies: true,
     configureWebpack: {

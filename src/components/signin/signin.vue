@@ -30,6 +30,10 @@
       </span>
       <button :disabled="!isLoginFormValid">Login</button>
     </form>
+
+    <!-- 카카오 로그인 버튼 추가 -->
+    <button class="kakao-login-btn" @click="handleKakaoLogin">카카오 로그인</button>
+
     <div class="link-container">
       <a href="javascript:void(0)" class="account-check" @click="$emit('toggle')">Don't have an account? <b>Sign up</b></a>
       <span class="checkbox forgot">
@@ -41,6 +45,7 @@
 
 <script>
 import { tryLogin } from '@/utils/Authentication.js';
+import { initializeKakao, authorizeKakaoLogin, getKakaoToken, fetchKakaoUserInfo, handleRedirect } from '@/utils/kakao.js';
 
 export default {
   data() {
@@ -61,15 +66,29 @@ export default {
           this.password,
           () => {
             alert('로그인 성공');
-            window.dispatchEvent(new Event('storage'));
             this.$router.push('/'); // 로그인 성공 시 홈 페이지로 이동
+            window.location.reload();
           },
           () => {
             alert('로그인 실패. 이메일이나 비밀번호를 확인하세요.');
           }
       );
     },
+    // 카카오 로그인 처리
+    handleKakaoLogin() {
+      initializeKakao(); // 카카오 SDK 초기화
+      authorizeKakaoLogin(); // 카카오 로그인 권한 요청
+    },
+
+    // 로그인 후 리디렉션 처리
+    handleRedirect() {
+      handleRedirect()
+    }
   },
+
+  mounted() {
+    this.handleRedirect(); // 페이지가 로드될 때 리디렉션된 경우 처리
+  }
 };
 </script>
 
@@ -143,5 +162,19 @@ button:hover {
   flex-direction: column; /* 세로 정렬 */
   align-items: center; /* 수평 가운데 정렬 */
   justify-content: center; /* 수직 가운데 정렬 */
+}
+
+.kakao-login-btn {
+  background-color: #ffeb00;
+  color: #3c1e1e;
+  border: none;
+  padding: 10px 20px;
+  border-radius: 50px;
+  margin-top: 10px;
+  cursor: pointer;
+}
+
+.kakao-login-btn:hover {
+  background-color: #ffcd00;
 }
 </style>

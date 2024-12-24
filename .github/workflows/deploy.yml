@@ -30,6 +30,9 @@ jobs:
 
       # 5. Vite 프로젝트 빌드
       - name: Build Vite project
+        env:
+          VITE_KAKAO_API_KEY: ${{ secrets.KAKAO_API_KEY }}  # GitHub Secrets에서 환경 변수 사용
+          VITE_TMDB_API_KEY: ${{ secrets.TMDB_API_KEY }}
         run: npm run build
 
       # 6. dist/assets 확인

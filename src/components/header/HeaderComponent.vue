@@ -37,22 +37,18 @@
 </template>
 
 <script>
+import { kakaoLogout } from '@/utils/kakao.js';
+
 export default {
   data() {
     return {
       isScrolled: false,
       isMobileMenuOpen: false,
-      userName: null,
+      userName: localStorage.getItem("User-ID") || null,
     };
   },
   mounted() {
     this.updateUserName();
-    window.addEventListener("scroll", this.handleScroll);
-    window.addEventListener('storage', this.updateUserName);
-  },
-  beforeUnmount() {
-    window.removeEventListener("scroll", this.handleScroll);
-    window.removeEventListener("storage", this.updateUserName);
   },
   methods: {
     handleScroll() {
@@ -68,6 +64,9 @@ export default {
       this.userName = localStorage.getItem("User-ID") || null; // User-ID 가져오기
     },
     logout() {
+      if(localStorage.getItem("kakao_token") !== null) {
+        kakaoLogout(); // 카카오 로그아웃 처리
+      }
       localStorage.removeItem("User-ID");
       localStorage.removeItem("TMDb-Key");
       this.userName = null; // 헤더에서 이름 제거
